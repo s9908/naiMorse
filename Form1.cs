@@ -21,6 +21,14 @@ namespace naiMorse
 
         Image<Bgr, Byte> obraz1; //oryginalny obraz z kamerki
         Image<Bgr, Byte> tlo; //tło
+        Image<Gray, Byte> tlo_v; //składowa V dla tła  
+        Image<Gray, Byte> bin_tlo_bialy; //kolor biały na składowej V tła    
+        Image<Gray, Byte> obraz1_v; //składowa V dla obrazu z kamery  
+        Image<Gray, Byte> bin_obraz1_bialy; //kolor biały na składowej V obrazu z kamery    
+
+        //parametry do funkcji erode i dilate
+        StructuringElementEx rect_12;
+        StructuringElementEx rect_6;
 
         public frmMain()
         {
@@ -35,6 +43,9 @@ namespace naiMorse
             th_pobierzObraz.Start();
             Thread.Sleep(500);
             aktualizujTlo();
+
+            rect_12 = new StructuringElementEx(12, 12, 6, 6, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
+            rect_6 = new StructuringElementEx(6, 6, 3, 3, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
         }
 
         void pobierzObraz() //funkcja z nieskonczoną pętlą, działa w wątku th_pobierzObraz
@@ -43,10 +54,29 @@ namespace naiMorse
             {
                 //oryginalny obraz                   
                 obraz1 = kamerka.QueryFrame();
-                pbObraz1.Image = obraz1.Bitmap;
+                pb1.Image = obraz1.Bitmap;
+
+                //składowa V i obraz binarny światła na obrazie z kamery
+                Image<Hsv, Byte> obraz1_hsv = new Image<Hsv, byte>(obraz1.Bitmap);
+                CvInvoke.cvCvtColor(obraz1, obraz1_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
+                obraz1_v = obraz1_hsv.Split()[2];
+                bin_obraz1_bialy = obraz1_v.InRange(new Gray(250), new Gray(255));
+                CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 1);
+                CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 2);
+                pb2.Image = bin_obraz1_bialy.Bitmap;
+
+                //składowa V i obraz binarny światła na tle
+                Image<Hsv, Byte> tlo_hsv = new Image<Hsv, byte>(tlo.Bitmap);
+                CvInvoke.cvCvtColor(tlo, tlo_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
+                tlo_v = tlo_hsv.Split()[2];
+                bin_tlo_bialy = tlo_v.InRange(new Gray(250), new Gray(255));
+                CvInvoke.cvErode(bin_tlo_bialy, bin_tlo_bialy, rect_12, 1);
+                CvInvoke.cvDilate(bin_tlo_bialy, bin_tlo_bialy, rect_6, 2);
+                pb4.Image = bin_tlo_bialy.Bitmap;
+
 
                 //wyswietlanie tla
-                pbTlo.Image = tlo.Bitmap;
+                pb3.Image = tlo.Bitmap;
                 Thread.Sleep(10);
             }
         }
