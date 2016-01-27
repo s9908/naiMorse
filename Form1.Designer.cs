@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             this.pbObraz1 = new System.Windows.Forms.PictureBox();
+            this.pbTlo = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbObraz1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbTlo)).BeginInit();
             this.SuspendLayout();
             // 
             // pbObraz1
@@ -41,17 +44,39 @@
             this.pbObraz1.TabIndex = 0;
             this.pbObraz1.TabStop = false;
             // 
+            // pbTlo
+            // 
+            this.pbTlo.Location = new System.Drawing.Point(793, 12);
+            this.pbTlo.Name = "pbTlo";
+            this.pbTlo.Size = new System.Drawing.Size(320, 240);
+            this.pbTlo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbTlo.TabIndex = 1;
+            this.pbTlo.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1038, 258);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 479);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pbTlo);
             this.Controls.Add(this.pbObraz1);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "NAI Morse project";
             this.Load += new System.EventHandler(this.frmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbObraz1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbTlo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -59,6 +84,8 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pbObraz1;
+        private System.Windows.Forms.PictureBox pbTlo;
+        private System.Windows.Forms.Button button1;
     }
 }
 
