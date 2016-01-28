@@ -106,7 +106,7 @@ namespace naiMorse
                     kontur_all = kontur_all.HNext;
                 }
 
-                if (kontur != null && kontur.Area > 2000)
+                if (kontur != null && kontur.Area > 500)
                 {
                     kontur = kontur.ApproxPoly(kontur.Perimeter * 0.0025, mem);
                     obraz1_mod.Draw(kontur, new Bgr(Color.Red), 12);
@@ -132,6 +132,7 @@ namespace naiMorse
             licz = 0;            
             st_poprzedni = st;
             bool done = true; //czy odczytano znak (skonwertowano czas trwania impulsu na znak)
+            bool done_litera = true;
             int t = 0;
             for(;;)
             {
@@ -153,6 +154,14 @@ namespace naiMorse
                     licz = 0;
                 }
 
+                if (st == false && licz > 400 && done_litera == false) //zakonczono odczyt litery
+                {
+                    done_litera = true;
+                    licz = 0;
+                    lvZnak.Items.Add("=======");
+                    lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
+                }
+
                 if(done == false && st == false) //dioda nie swieci i nie odczytano poprzedniego znaku - odczytywanie go
                 {
                     string z = "";
@@ -160,8 +169,9 @@ namespace naiMorse
                         else z = ".";
                     //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
                     lvZnak.Items.Add(z);
-                    lvZnak.Items[lvCzasy.Items.Count - 1].EnsureVisible();
+                    lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
                     done = true;
+                    done_litera = false;
                 }
 
                 licz++;
