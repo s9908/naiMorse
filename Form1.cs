@@ -20,11 +20,13 @@ namespace naiMorse
         Capture kamerka;
 
         Image<Bgr, Byte> obraz1; //oryginalny obraz z kamerki
+        Image<Bgr, Byte> obraz1_mod; //oryginalny obraz z kamerki po modyfikacjach do wyswietlenia uztkownikowi
         Image<Bgr, Byte> tlo; //tło
         Image<Gray, Byte> tlo_v; //składowa V dla tła  
         Image<Gray, Byte> bin_tlo_bialy; //kolor biały na składowej V tła    
         Image<Gray, Byte> obraz1_v; //składowa V dla obrazu z kamery  
         Image<Gray, Byte> bin_obraz1_bialy; //kolor biały na składowej V obrazu z kamery    
+    
 
         //parametry do funkcji erode i dilate
         StructuringElementEx rect_12;
@@ -54,15 +56,15 @@ namespace naiMorse
             {
                 //oryginalny obraz                   
                 obraz1 = kamerka.QueryFrame();
-                pb1.Image = obraz1.Bitmap;
+                obraz1_mod = obraz1.Copy();
 
                 //składowa V i obraz binarny światła na obrazie z kamery
                 Image<Hsv, Byte> obraz1_hsv = new Image<Hsv, byte>(obraz1.Bitmap);
                 CvInvoke.cvCvtColor(obraz1, obraz1_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
                 obraz1_v = obraz1_hsv.Split()[2];
                 bin_obraz1_bialy = obraz1_v.InRange(new Gray(250), new Gray(255));
-                CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 1);
-                CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 2);
+                CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
+                CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
                 pb2.Image = bin_obraz1_bialy.Bitmap;
 
                 //składowa V i obraz binarny światła na tle
@@ -70,14 +72,42 @@ namespace naiMorse
                 CvInvoke.cvCvtColor(tlo, tlo_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
                 tlo_v = tlo_hsv.Split()[2];
                 bin_tlo_bialy = tlo_v.InRange(new Gray(250), new Gray(255));
-                CvInvoke.cvErode(bin_tlo_bialy, bin_tlo_bialy, rect_12, 1);
-                CvInvoke.cvDilate(bin_tlo_bialy, bin_tlo_bialy, rect_6, 2);
+                CvInvoke.cvErode(bin_tlo_bialy, bin_tlo_bialy, rect_6, 5);
+                CvInvoke.cvDilate(bin_tlo_bialy, bin_tlo_bialy, rect_12, 5);
                 pb4.Image = bin_tlo_bialy.Bitmap;
 
+                //różnica powyższych
+                Image<Gray, Byte> bin_diff = new Image<Gray, byte>(tlo.Bitmap);
+                CvInvoke.cvAbsDiff(bin_obraz1_bialy, bin_tlo_bialy, bin_diff);
+                pb5.Image = bin_diff.Bitmap;
+
+                //kontury na swietle
+                MemStorage mem = new MemStorage();
+                Contour<Point> kontur_all = bin_diff.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, mem);
+                Contour<Point> kontur = null; //kontur ktory bedzie brany pod uwage 
+                //okreslanie najwiekszego konturu
+                while(kontur_all != null)
+                {
+                    double rozmiar = 0;
+                    if (kontur != null) rozmiar = kontur.Area;            
+                    if (kontur_all.Area > rozmiar)
+                        kontur = kontur_all;
+                    kontur_all = kontur_all.HNext;
+                }
+
+                if(kontur != null)
+                {
+                    kontur = kontur.ApproxPoly(kontur.Perimeter * 0.0025, mem);
+                    obraz1_mod.Draw(kontur, new Bgr(Color.Red), 12);
+                }
+
+
+                //wyswietlanie obrazu z kamerki z naznaczonymi konturami
+                pb1.Image = obraz1_mod.Bitmap;
 
                 //wyswietlanie tla
                 pb3.Image = tlo.Bitmap;
-                Thread.Sleep(10);
+                Thread.Sleep(10);                
             }
         }
 
