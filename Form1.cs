@@ -38,6 +38,7 @@ namespace naiMorse
         public frmMain()
         {
             InitializeComponent();
+            Thread.Sleep(200);
             CheckForIllegalCrossThreadCalls = false;
             obraz1 = new Image<Bgr, byte>(new Size(640, 480));
             tlo = new Image<Bgr, byte>(new Size(640, 480));
@@ -130,6 +131,8 @@ namespace naiMorse
         {
             licz = 0;            
             st_poprzedni = st;
+            bool done = true; //czy odczytano znak (skonwertowano czas trwania impulsu na znak)
+            int t = 0;
             for(;;)
             {
                 if(st != st_poprzedni) //zmiana stanu
@@ -138,14 +141,27 @@ namespace naiMorse
                     lvCzasy.Items[lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
                     lvCzasy.Items[lvCzasy.Items.Count - 1].EnsureVisible();
                     st_poprzedni = st;
+                    done = false;
+                    t = licz;
                     Thread.Sleep(100);
                     licz = 0;
                 }
 
                 if(licz > 1000) //gdy swieci sie za dlugo, zakladamy ze to tło
                 {
-                    aktualizujTlo();
+                    if(st == true) aktualizujTlo();
                     licz = 0;
+                }
+
+                if(done == false && st == false) //dioda nie swieci i nie odczytano poprzedniego znaku - odczytywanie go
+                {
+                    string z = "";
+                    if (t > 200) z = "-";
+                        else z = ".";
+                    //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
+                    lvZnak.Items.Add(z);
+                    lvZnak.Items[lvCzasy.Items.Count - 1].EnsureVisible();
+                    done = true;
                 }
 
                 licz++;
@@ -168,6 +184,11 @@ namespace naiMorse
         private void button1_Click(object sender, EventArgs e)
         {
             aktualizujTlo();
+        }
+
+        private void lvCzasy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

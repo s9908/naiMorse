@@ -38,6 +38,8 @@
             this.lvCzasy = new System.Windows.Forms.ListView();
             this.stan = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.czas = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lvZnak = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb4)).BeginInit();
@@ -113,6 +115,7 @@
             this.lvCzasy.TabIndex = 6;
             this.lvCzasy.UseCompatibleStateImageBehavior = false;
             this.lvCzasy.View = System.Windows.Forms.View.Details;
+            this.lvCzasy.SelectedIndexChanged += new System.EventHandler(this.lvCzasy_SelectedIndexChanged);
             // 
             // stan
             // 
@@ -124,11 +127,27 @@
             this.czas.Text = "Czas";
             this.czas.Width = 67;
             // 
+            // lvZnak
+            // 
+            this.lvZnak.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.lvZnak.Location = new System.Drawing.Point(550, 12);
+            this.lvZnak.Name = "lvZnak";
+            this.lvZnak.Size = new System.Drawing.Size(133, 240);
+            this.lvZnak.TabIndex = 7;
+            this.lvZnak.UseCompatibleStateImageBehavior = false;
+            this.lvZnak.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Znak";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 608);
+            this.Controls.Add(this.lvZnak);
             this.Controls.Add(this.lvCzasy);
             this.Controls.Add(this.pb5);
             this.Controls.Add(this.pb2);
@@ -160,6 +179,8 @@
         private System.Windows.Forms.ListView lvCzasy;
         private System.Windows.Forms.ColumnHeader stan;
         private System.Windows.Forms.ColumnHeader czas;
+        private System.Windows.Forms.ListView lvZnak;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }
 
