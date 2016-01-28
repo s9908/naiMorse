@@ -35,6 +35,17 @@ namespace naiMorse
         StructuringElementEx rect_12;
         StructuringElementEx rect_6;
 
+        string MorseNaLitere(string morse) //zamiana kodu morsea na litere
+        {
+            string l = "";
+            switch (morse)
+            {
+                case "...": l = "S"; break;
+                case "---": l = "O"; break;
+            }            
+            return l;
+        }
+
         public frmMain()
         {
             InitializeComponent();
@@ -57,6 +68,7 @@ namespace naiMorse
 
             rect_12 = new StructuringElementEx(12, 12, 6, 6, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
             rect_6 = new StructuringElementEx(6, 6, 3, 3, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
+            lNapis.Text = "";
         }
 
         void pobierzObraz() //funkcja z nieskonczoną pętlą, działa w wątku th_pobierzObraz
@@ -160,6 +172,8 @@ namespace naiMorse
                     licz = 0;
                     lvZnak.Items.Add("=======");
                     lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
+                    lNapis.Text += MorseNaLitere(lMorse.Text);
+                    lMorse.Text = "";
                 }
 
                 if(done == false && st == false) //dioda nie swieci i nie odczytano poprzedniego znaku - odczytywanie go
@@ -168,6 +182,7 @@ namespace naiMorse
                     if (t > 200) z = "-";
                         else z = ".";
                     //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
+                    lMorse.Text += z;
                     lvZnak.Items.Add(z);
                     lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
                     done = true;

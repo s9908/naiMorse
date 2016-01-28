@@ -40,6 +40,8 @@
             this.czas = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lvZnak = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lMorse = new System.Windows.Forms.Label();
+            this.lNapis = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb4)).BeginInit();
@@ -131,9 +133,9 @@
             // 
             this.lvZnak.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-            this.lvZnak.Location = new System.Drawing.Point(550, 12);
+            this.lvZnak.Location = new System.Drawing.Point(527, 12);
             this.lvZnak.Name = "lvZnak";
-            this.lvZnak.Size = new System.Drawing.Size(133, 240);
+            this.lvZnak.Size = new System.Drawing.Size(120, 240);
             this.lvZnak.TabIndex = 7;
             this.lvZnak.UseCompatibleStateImageBehavior = false;
             this.lvZnak.View = System.Windows.Forms.View.Details;
@@ -142,11 +144,33 @@
             // 
             this.columnHeader1.Text = "Znak";
             // 
+            // lMorse
+            // 
+            this.lMorse.AutoSize = true;
+            this.lMorse.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lMorse.Location = new System.Drawing.Point(653, 57);
+            this.lMorse.Name = "lMorse";
+            this.lMorse.Size = new System.Drawing.Size(83, 25);
+            this.lMorse.TabIndex = 8;
+            this.lMorse.Text = "lMorse";
+            // 
+            // lNapis
+            // 
+            this.lNapis.AutoSize = true;
+            this.lNapis.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lNapis.Location = new System.Drawing.Point(653, 93);
+            this.lNapis.Name = "lNapis";
+            this.lNapis.Size = new System.Drawing.Size(78, 25);
+            this.lNapis.TabIndex = 9;
+            this.lNapis.Text = "lNapis";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 608);
+            this.Controls.Add(this.lNapis);
+            this.Controls.Add(this.lMorse);
             this.Controls.Add(this.lvZnak);
             this.Controls.Add(this.lvCzasy);
             this.Controls.Add(this.pb5);
@@ -165,6 +189,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pb2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb5)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -181,6 +206,8 @@
         private System.Windows.Forms.ColumnHeader czas;
         private System.Windows.Forms.ListView lvZnak;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.Label lMorse;
+        private System.Windows.Forms.Label lNapis;
     }
 }
 
