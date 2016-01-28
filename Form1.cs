@@ -17,6 +17,10 @@ namespace naiMorse
     public partial class frmMain : Form
     {
         Thread th_pobierzObraz; //wątek do odczytu kamerki i przetwarzania obrazu
+        Thread th_liczCzas; //watek do liczenia czasów ON/OFF
+        int licz; //licznik
+        bool st; //stan ON/OFF
+        bool st_poprzedni; //do sledzena zmian ON/OFF
         Capture kamerka;
 
         Image<Bgr, Byte> obraz1; //oryginalny obraz z kamerki
@@ -34,6 +38,7 @@ namespace naiMorse
         public frmMain()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
             obraz1 = new Image<Bgr, byte>(new Size(640, 480));
             tlo = new Image<Bgr, byte>(new Size(640, 480));
             //inicjalizacja kamerki
@@ -42,6 +47,10 @@ namespace naiMorse
             //wątek odczytu start
             th_pobierzObraz = new Thread(pobierzObraz);
             th_pobierzObraz.Start();
+            //wątek zliczania czasu
+            th_liczCzas = new Thread(liczCzas);
+            th_liczCzas.Start();
+
             Thread.Sleep(500);
             aktualizujTlo();
 
@@ -78,7 +87,8 @@ namespace naiMorse
 
                 //różnica powyższych
                 Image<Gray, Byte> bin_diff = new Image<Gray, byte>(tlo.Bitmap);
-                CvInvoke.cvAbsDiff(bin_obraz1_bialy, bin_tlo_bialy, bin_diff);
+                //CvInvoke.cvAbsDiff(bin_obraz1_bialy, bin_tlo_bialy, bin_diff);
+                bin_diff = bin_obraz1_bialy - bin_tlo_bialy;
                 pb5.Image = bin_diff.Bitmap;
 
                 //kontury na swietle
@@ -95,10 +105,15 @@ namespace naiMorse
                     kontur_all = kontur_all.HNext;
                 }
 
-                if (kontur != null)
+                if (kontur != null && kontur.Area > 2000)
                 {
                     kontur = kontur.ApproxPoly(kontur.Perimeter * 0.0025, mem);
                     obraz1_mod.Draw(kontur, new Bgr(Color.Red), 12);
+                    st = true;
+                }
+                else
+                {
+                    st = false;
                 }
 
 
@@ -107,8 +122,36 @@ namespace naiMorse
 
                 //wyswietlanie tla
                 pb3.Image = tlo.Bitmap;
-                Thread.Sleep(10);
+                //Thread.Sleep(10);
             }
+        }
+
+        void liczCzas() //funkcja do watku zliczania czasu poszczegolnych stanow ON/OFF
+        {
+            licz = 0;            
+            st_poprzedni = st;
+            for(;;)
+            {
+                if(st != st_poprzedni) //zmiana stanu
+                {
+                    lvCzasy.Items.Add(st.ToString());
+                    lvCzasy.Items[lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
+                    lvCzasy.Items[lvCzasy.Items.Count - 1].EnsureVisible();
+                    st_poprzedni = st;
+                    Thread.Sleep(100);
+                    licz = 0;
+                }
+
+                if(licz > 1000) //gdy swieci sie za dlugo, zakladamy ze to tło
+                {
+                    aktualizujTlo();
+                    licz = 0;
+                }
+
+                licz++;
+                Thread.Sleep(1);
+            }
+
         }
 
         void aktualizujTlo() //pobiera klatke i zapisuje w "Image<Bgr, Byte> tlo"

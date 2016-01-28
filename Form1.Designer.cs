@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("NA");
             this.pb1 = new System.Windows.Forms.PictureBox();
             this.pb3 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.pb4 = new System.Windows.Forms.PictureBox();
             this.pb2 = new System.Windows.Forms.PictureBox();
             this.pb5 = new System.Windows.Forms.PictureBox();
+            this.lvCzasy = new System.Windows.Forms.ListView();
+            this.stan = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.czas = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb4)).BeginInit();
@@ -61,7 +65,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(662, 63);
+            this.button1.Location = new System.Drawing.Point(717, 258);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -96,11 +100,36 @@
             this.pb5.TabIndex = 5;
             this.pb5.TabStop = false;
             // 
+            // lvCzasy
+            // 
+            this.lvCzasy.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.stan,
+            this.czas});
+            this.lvCzasy.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1});
+            this.lvCzasy.Location = new System.Drawing.Point(338, 12);
+            this.lvCzasy.Name = "lvCzasy";
+            this.lvCzasy.Size = new System.Drawing.Size(183, 240);
+            this.lvCzasy.TabIndex = 6;
+            this.lvCzasy.UseCompatibleStateImageBehavior = false;
+            this.lvCzasy.View = System.Windows.Forms.View.Details;
+            // 
+            // stan
+            // 
+            this.stan.Text = "Stan";
+            this.stan.Width = 78;
+            // 
+            // czas
+            // 
+            this.czas.Text = "Czas";
+            this.czas.Width = 67;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 608);
+            this.Controls.Add(this.lvCzasy);
             this.Controls.Add(this.pb5);
             this.Controls.Add(this.pb2);
             this.Controls.Add(this.pb4);
@@ -128,6 +157,9 @@
         private System.Windows.Forms.PictureBox pb4;
         private System.Windows.Forms.PictureBox pb2;
         private System.Windows.Forms.PictureBox pb5;
+        private System.Windows.Forms.ListView lvCzasy;
+        private System.Windows.Forms.ColumnHeader stan;
+        private System.Windows.Forms.ColumnHeader czas;
     }
 }
 
