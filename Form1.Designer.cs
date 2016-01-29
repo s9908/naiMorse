@@ -40,6 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.bStart = new System.Windows.Forms.Button();
             this.bStop = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbCzulosc)).BeginInit();
@@ -122,7 +123,7 @@
             // 
             // tbCzulosc
             // 
-            this.tbCzulosc.Location = new System.Drawing.Point(498, 240);
+            this.tbCzulosc.Location = new System.Drawing.Point(498, 326);
             this.tbCzulosc.Maximum = 30;
             this.tbCzulosc.Name = "tbCzulosc";
             this.tbCzulosc.Size = new System.Drawing.Size(234, 45);
@@ -132,7 +133,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(498, 224);
+            this.label3.Location = new System.Drawing.Point(498, 310);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(141, 13);
             this.label3.TabIndex = 16;
@@ -143,7 +144,7 @@
             this.bStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.bStart.Location = new System.Drawing.Point(498, 178);
             this.bStart.Name = "bStart";
-            this.bStart.Size = new System.Drawing.Size(90, 23);
+            this.bStart.Size = new System.Drawing.Size(234, 59);
             this.bStart.TabIndex = 17;
             this.bStart.Text = "Start";
             this.bStart.UseVisualStyleBackColor = true;
@@ -151,20 +152,31 @@
             // 
             // bStop
             // 
+            this.bStop.Enabled = false;
             this.bStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.bStop.Location = new System.Drawing.Point(643, 178);
+            this.bStop.Location = new System.Drawing.Point(498, 243);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(90, 23);
+            this.bStop.Size = new System.Drawing.Size(234, 59);
             this.bStop.TabIndex = 18;
             this.bStop.Text = "Stop";
             this.bStop.UseVisualStyleBackColor = true;
             this.bStop.Click += new System.EventHandler(this.bStop_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(583, 413);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(150, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "© Copyright 2016,  Piotr Szura";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 471);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.bStop);
             this.Controls.Add(this.bStart);
             this.Controls.Add(this.label3);
@@ -180,6 +192,7 @@
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "NAI Morse project";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbCzulosc)).EndInit();
@@ -202,6 +215,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button bStart;
         private System.Windows.Forms.Button bStop;
+        private System.Windows.Forms.Label label4;
     }
 }
 

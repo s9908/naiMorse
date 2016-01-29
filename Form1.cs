@@ -94,23 +94,17 @@ namespace naiMorse
         public frmMain()
         {
             InitializeComponent();
-            Status = new frmStatus(); //okienko w którym będzie podgląd jak działa aplikacja
-            Thread.Sleep(200);
-            //CheckForIllegalCrossThreadCalls = false;
+            Status = new frmStatus(); //okienko w którym będzie podgląd jak działa aplikacja     
             obraz1 = new Image<Bgr, byte>(new Size(640, 480));
             tlo = new Image<Bgr, byte>(new Size(640, 480));
             //inicjalizacja kamerki
             kamerka = new Capture(0);
-            aktualizujTlo();
+
             //wątek odczytu start
             th_pobierzObraz = new Thread(pobierzObraz);
-            //th_pobierzObraz.Start();
-            //wątek zliczania czasu
-            th_liczCzas = new Thread(liczCzas);
-            //th_liczCzas.Start();
 
-            Thread.Sleep(500);
-            aktualizujTlo();
+            //wątek zliczania czasu
+            th_liczCzas = new Thread(liczCzas);        
 
             rect_12 = new StructuringElementEx(12, 12, 6, 6, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
             rect_6 = new StructuringElementEx(6, 6, 3, 3, Emgu.CV.CvEnum.CV_ELEMENT_SHAPE.CV_SHAPE_RECT);
@@ -135,8 +129,7 @@ namespace naiMorse
                    CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
                    CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
                    Status.pb2.Image = bin_obraz1_bialy.Bitmap;
-                });
-                
+                });                
 
                 //składowa V i obraz binarny światła na tle
                 Image<Hsv, Byte> tlo_hsv = new Image<Hsv, byte>(tlo.Bitmap);
@@ -146,7 +139,6 @@ namespace naiMorse
                 CvInvoke.cvErode(bin_tlo_bialy, bin_tlo_bialy, rect_12, 5);
                 CvInvoke.cvDilate(bin_tlo_bialy, bin_tlo_bialy, rect_6, 5);
                 Status.pb4.Image = bin_tlo_bialy.Bitmap;
-
 
                 //różnica powyższych
                 Image<Gray, Byte> bin_diff = new Image<Gray, byte>(tlo.Bitmap);              
@@ -180,7 +172,6 @@ namespace naiMorse
 
                 //wyswietlanie obrazu z kamerki z naznaczonymi konturami
                 pb1.Image = obraz1_mod.Bitmap;
-
                 //wyswietlanie tla
                 Status.pb3.Image = tlo.Bitmap;
             }
@@ -233,8 +224,7 @@ namespace naiMorse
                 {
                     string z = "";
                     if (t > 200) z = "—";
-                        else z = "•";
-                    //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
+                        else z = "•";                   
                     this.Invoke((MethodInvoker)delegate
                     {
                         lMorse.Text += z;
@@ -269,6 +259,8 @@ namespace naiMorse
 
         private void bStart_Click(object sender, EventArgs e)
         {
+            bStart.Enabled = false;
+            bStop.Enabled = true;
             if (th_pobierzObraz.ThreadState == ThreadState.Suspended)
             {
                 th_pobierzObraz.Resume();
@@ -279,12 +271,22 @@ namespace naiMorse
                 th_pobierzObraz.Start();
                 th_liczCzas.Start();
             }
+            Thread.Sleep(100);
+            aktualizujTlo();
         }
 
         private void bStop_Click(object sender, EventArgs e)
         {
+            bStart.Enabled = true;
+            bStop.Enabled = false;
             th_liczCzas.Suspend();
             th_pobierzObraz.Suspend();
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            th_liczCzas.Abort();
+            th_pobierzObraz.Abort();
         }
     }
 }
