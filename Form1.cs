@@ -22,6 +22,7 @@ namespace naiMorse
         bool st; //stan ON/OFF
         bool st_poprzedni; //do sledzena zmian ON/OFF
         Capture kamerka;
+        frmStatus Status;
 
         Image<Bgr, Byte> obraz1; //oryginalny obraz z kamerki
         Image<Bgr, Byte> obraz1_mod; //oryginalny obraz z kamerki po modyfikacjach do wyswietlenia uztkownikowi
@@ -40,15 +41,60 @@ namespace naiMorse
             string l = "";
             switch (morse)
             {
-                case "...": l = "S"; break;
-                case "---": l = "O"; break;
-            }            
+                case "•—": l = "A"; break;
+                case "—•••": l = "B"; break;
+                case "—•—•": l = "C"; break;
+                case "—••": l = "D"; break;
+                case "•": l = "E"; break;
+                case "••—•": l = "F"; break;
+                case "——•": l = "G"; break;
+                case "••••": l = "H"; break;
+                case "••": l = "I"; break;
+                case "•———": l = "J"; break;
+                case "—•—": l = "K"; break;
+                case "•—••": l = "L"; break;
+                case "——": l = "M"; break;
+                case "—•": l = "N"; break;
+                case "———": l = "O"; break;
+                case "•——•": l = "P"; break;
+                case "——•—": l = "Q"; break;
+                case "•—•": l = "R"; break;
+                case "•••": l = "S"; break;
+                case "—": l = "T"; break;
+                case "••—": l = "U"; break;
+                case "•••—": l = "V"; break;
+                case "•——": l = "W"; break;
+                case "—••—": l = "X"; break;
+                case "—•——": l = "Y"; break;
+                case "——••": l = "Z"; break;
+                case "•—•—": l = "ą"; break;
+                case "—•—••": l = "ć"; break;
+                case "••—••": l = "ę"; break;
+                case "————": l = "ch"; break;
+                case "•—••—": l = "ł"; break;
+                case "——•——": l = "ń"; break;
+                case "———•": l = "ó"; break;
+                case "•••—•••": l = "ś"; break;
+                case "——••—•": l = "ż"; break;
+                case "——••—": l = "ź"; break;
+                case "•————": l = "1"; break;
+                case "••———": l = "2"; break;
+                case "•••——": l = "3"; break;
+                case "••••—": l = "4"; break;
+                case "•••••": l = "5"; break;
+                case "—••••": l = "6"; break;
+                case "——•••": l = "7"; break;
+                case "———••": l = "8"; break;
+                case "————•": l = "9"; break;
+                case "—————": l = "0"; break;
+            }
             return l;
         }
 
         public frmMain()
         {
             InitializeComponent();
+            Status = new frmStatus(); //okienko w którym będzie podgląd jak działa aplikacja
             Thread.Sleep(200);
             CheckForIllegalCrossThreadCalls = false;
             obraz1 = new Image<Bgr, byte>(new Size(640, 480));
@@ -86,7 +132,7 @@ namespace naiMorse
                 bin_obraz1_bialy = obraz1_v.InRange(new Gray(250), new Gray(255));
                 CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
                 CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
-                pb2.Image = bin_obraz1_bialy.Bitmap;
+                Status.pb2.Image = bin_obraz1_bialy.Bitmap;
 
                 //składowa V i obraz binarny światła na tle
                 Image<Hsv, Byte> tlo_hsv = new Image<Hsv, byte>(tlo.Bitmap);
@@ -95,14 +141,13 @@ namespace naiMorse
                 bin_tlo_bialy = tlo_v.InRange(new Gray(250), new Gray(255));
                 CvInvoke.cvErode(bin_tlo_bialy, bin_tlo_bialy, rect_12, 5);
                 CvInvoke.cvDilate(bin_tlo_bialy, bin_tlo_bialy, rect_6, 5);
-                pb4.Image = bin_tlo_bialy.Bitmap;
+                Status.pb4.Image = bin_tlo_bialy.Bitmap;
 
 
                 //różnica powyższych
-                Image<Gray, Byte> bin_diff = new Image<Gray, byte>(tlo.Bitmap);
-                //CvInvoke.cvAbsDiff(bin_obraz1_bialy, bin_tlo_bialy, bin_diff);
+                Image<Gray, Byte> bin_diff = new Image<Gray, byte>(tlo.Bitmap);              
                 bin_diff = bin_obraz1_bialy - bin_tlo_bialy;
-                pb5.Image = bin_diff.Bitmap;
+                Status.pb5.Image = bin_diff.Bitmap;
 
                 //kontury na swietle
                 MemStorage mem = new MemStorage();
@@ -129,13 +174,11 @@ namespace naiMorse
                     st = false;
                 }
 
-
                 //wyswietlanie obrazu z kamerki z naznaczonymi konturami
                 pb1.Image = obraz1_mod.Bitmap;
 
                 //wyswietlanie tla
-                pb3.Image = tlo.Bitmap;
-                //Thread.Sleep(10);
+                Status.pb3.Image = tlo.Bitmap;
             }
         }
 
@@ -150,9 +193,9 @@ namespace naiMorse
             {
                 if(st != st_poprzedni) //zmiana stanu
                 {
-                    lvCzasy.Items.Add(st.ToString());
-                    lvCzasy.Items[lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
-                    lvCzasy.Items[lvCzasy.Items.Count - 1].EnsureVisible();
+                    Status.lvCzasy.Items.Add(st.ToString());
+                    Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
+                    Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 1].EnsureVisible();
                     st_poprzedni = st;
                     done = false;
                     t = licz;
@@ -170,8 +213,8 @@ namespace naiMorse
                 {
                     done_litera = true;
                     licz = 0;
-                    lvZnak.Items.Add("=======");
-                    lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
+                    Status.lvZnak.Items.Add("=======");
+                    Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
                     lNapis.Text += MorseNaLitere(lMorse.Text);
                     lMorse.Text = "";
                 }
@@ -179,12 +222,12 @@ namespace naiMorse
                 if(done == false && st == false) //dioda nie swieci i nie odczytano poprzedniego znaku - odczytywanie go
                 {
                     string z = "";
-                    if (t > 200) z = "-";
-                        else z = ".";
+                    if (t > 200) z = "—";
+                        else z = "•";
                     //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
                     lMorse.Text += z;
-                    lvZnak.Items.Add(z);
-                    lvZnak.Items[lvZnak.Items.Count - 1].EnsureVisible();
+                    Status.lvZnak.Items.Add(z);
+                    Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
                     done = true;
                     done_litera = false;
                 }
@@ -199,21 +242,16 @@ namespace naiMorse
         {
             tlo = new Image<Bgr, byte>(obraz1.Bitmap);
             tlo = obraz1.Copy();           
+        }        
+
+        private void btnStatus_Click(object sender, EventArgs e)
+        {
+            Status.Show();
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
+        private void bWyczysc_Click(object sender, EventArgs e)
         {
-         
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            aktualizujTlo();
-        }
-
-        private void lvCzasy_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            lNapis.Text = "";
         }
     }
 }
