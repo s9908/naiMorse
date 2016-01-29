@@ -96,7 +96,7 @@ namespace naiMorse
             InitializeComponent();
             Status = new frmStatus(); //okienko w którym będzie podgląd jak działa aplikacja
             Thread.Sleep(200);
-            CheckForIllegalCrossThreadCalls = false;
+            //CheckForIllegalCrossThreadCalls = false;
             obraz1 = new Image<Bgr, byte>(new Size(640, 480));
             tlo = new Image<Bgr, byte>(new Size(640, 480));
             //inicjalizacja kamerki
@@ -104,10 +104,10 @@ namespace naiMorse
             aktualizujTlo();
             //wątek odczytu start
             th_pobierzObraz = new Thread(pobierzObraz);
-            th_pobierzObraz.Start();
+            //th_pobierzObraz.Start();
             //wątek zliczania czasu
             th_liczCzas = new Thread(liczCzas);
-            th_liczCzas.Start();
+            //th_liczCzas.Start();
 
             Thread.Sleep(500);
             aktualizujTlo();
@@ -129,10 +129,14 @@ namespace naiMorse
                 Image<Hsv, Byte> obraz1_hsv = new Image<Hsv, byte>(obraz1.Bitmap);
                 CvInvoke.cvCvtColor(obraz1, obraz1_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
                 obraz1_v = obraz1_hsv.Split()[2];
-                bin_obraz1_bialy = obraz1_v.InRange(new Gray(265 - tbCzulosc.Value), new Gray(240 + tbCzulosc.Value));
-                CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
-                CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
-                Status.pb2.Image = bin_obraz1_bialy.Bitmap;
+                this.Invoke((MethodInvoker)delegate
+                {
+                   bin_obraz1_bialy = obraz1_v.InRange(new Gray(265 - tbCzulosc.Value), new Gray(240 + tbCzulosc.Value));
+                   CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
+                   CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
+                   Status.pb2.Image = bin_obraz1_bialy.Bitmap;
+                });
+                
 
                 //składowa V i obraz binarny światła na tle
                 Image<Hsv, Byte> tlo_hsv = new Image<Hsv, byte>(tlo.Bitmap);
@@ -193,9 +197,12 @@ namespace naiMorse
             {
                 if(st != st_poprzedni) //zmiana stanu
                 {
-                    Status.lvCzasy.Items.Add(st.ToString());
-                    Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
-                    Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 1].EnsureVisible();
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        Status.lvCzasy.Items.Add(st.ToString());
+                        Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 2].SubItems.Add(licz.ToString());
+                        Status.lvCzasy.Items[Status.lvCzasy.Items.Count - 1].EnsureVisible();
+                    });
                     st_poprzedni = st;
                     done = false;
                     t = licz;
@@ -213,10 +220,13 @@ namespace naiMorse
                 {
                     done_litera = true;
                     licz = 0;
-                    Status.lvZnak.Items.Add("=======");
-                    Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
-                    lNapis.Text += MorseNaLitere(lMorse.Text);
-                    lMorse.Text = "";
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        Status.lvZnak.Items.Add("=======");
+                        Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
+                        lNapis.Text += MorseNaLitere(lMorse.Text);
+                        lMorse.Text = "";
+                    });
                 }
 
                 if(done == false && st == false) //dioda nie swieci i nie odczytano poprzedniego znaku - odczytywanie go
@@ -225,9 +235,12 @@ namespace naiMorse
                     if (t > 200) z = "—";
                         else z = "•";
                     //  int cz = int.Parse(lvCzasy.Items[lvCzasy.Items.Count - 1].Text);
-                    lMorse.Text += z;
-                    Status.lvZnak.Items.Add(z);
-                    Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        lMorse.Text += z;
+                        Status.lvZnak.Items.Add(z);
+                        Status.lvZnak.Items[Status.lvZnak.Items.Count - 1].EnsureVisible();
+                    });
                     done = true;
                     done_litera = false;
                 }
@@ -253,6 +266,25 @@ namespace naiMorse
         {
             lNapis.Text = "";
         }
-           
+
+        private void bStart_Click(object sender, EventArgs e)
+        {
+            if (th_pobierzObraz.ThreadState == ThreadState.Suspended)
+            {
+                th_pobierzObraz.Resume();
+                th_liczCzas.Resume();
+            }
+            else
+            {
+                th_pobierzObraz.Start();
+                th_liczCzas.Start();
+            }
+        }
+
+        private void bStop_Click(object sender, EventArgs e)
+        {
+            th_liczCzas.Suspend();
+            th_pobierzObraz.Suspend();
+        }
     }
 }

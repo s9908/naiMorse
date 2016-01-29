@@ -38,6 +38,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tbCzulosc = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
+            this.bStart = new System.Windows.Forms.Button();
+            this.bStop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbCzulosc)).BeginInit();
@@ -60,7 +62,6 @@
             this.lMorse.Name = "lMorse";
             this.lMorse.Size = new System.Drawing.Size(96, 25);
             this.lMorse.TabIndex = 8;
-            this.lMorse.Text = "lMorse";
             // 
             // lNapis
             // 
@@ -70,7 +71,6 @@
             this.lNapis.Name = "lNapis";
             this.lNapis.Size = new System.Drawing.Size(394, 25);
             this.lNapis.TabIndex = 9;
-            this.lNapis.Text = "lNapis";
             // 
             // btnStatus
             // 
@@ -122,7 +122,7 @@
             // 
             // tbCzulosc
             // 
-            this.tbCzulosc.Location = new System.Drawing.Point(498, 199);
+            this.tbCzulosc.Location = new System.Drawing.Point(498, 240);
             this.tbCzulosc.Maximum = 30;
             this.tbCzulosc.Name = "tbCzulosc";
             this.tbCzulosc.Size = new System.Drawing.Size(234, 45);
@@ -132,17 +132,41 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(498, 183);
+            this.label3.Location = new System.Drawing.Point(498, 224);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(141, 13);
             this.label3.TabIndex = 16;
             this.label3.Text = "Czułość wykrywania światła";
+            // 
+            // bStart
+            // 
+            this.bStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.bStart.Location = new System.Drawing.Point(498, 178);
+            this.bStart.Name = "bStart";
+            this.bStart.Size = new System.Drawing.Size(90, 23);
+            this.bStart.TabIndex = 17;
+            this.bStart.Text = "Start";
+            this.bStart.UseVisualStyleBackColor = true;
+            this.bStart.Click += new System.EventHandler(this.bStart_Click);
+            // 
+            // bStop
+            // 
+            this.bStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.bStop.Location = new System.Drawing.Point(643, 178);
+            this.bStop.Name = "bStop";
+            this.bStop.Size = new System.Drawing.Size(90, 23);
+            this.bStop.TabIndex = 18;
+            this.bStop.Text = "Stop";
+            this.bStop.UseVisualStyleBackColor = true;
+            this.bStop.Click += new System.EventHandler(this.bStop_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 471);
+            this.Controls.Add(this.bStop);
+            this.Controls.Add(this.bStart);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbCzulosc);
             this.Controls.Add(this.pictureBox1);
@@ -176,6 +200,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TrackBar tbCzulosc;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button bStart;
+        private System.Windows.Forms.Button bStop;
     }
 }
 
