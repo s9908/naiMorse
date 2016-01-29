@@ -129,7 +129,7 @@ namespace naiMorse
                 Image<Hsv, Byte> obraz1_hsv = new Image<Hsv, byte>(obraz1.Bitmap);
                 CvInvoke.cvCvtColor(obraz1, obraz1_hsv, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2HSV);
                 obraz1_v = obraz1_hsv.Split()[2];
-                bin_obraz1_bialy = obraz1_v.InRange(new Gray(250), new Gray(255));
+                bin_obraz1_bialy = obraz1_v.InRange(new Gray(265 - tbCzulosc.Value), new Gray(240 + tbCzulosc.Value));
                 CvInvoke.cvErode(bin_obraz1_bialy, bin_obraz1_bialy, rect_12, 5);
                 CvInvoke.cvDilate(bin_obraz1_bialy, bin_obraz1_bialy, rect_6, 5);
                 Status.pb2.Image = bin_obraz1_bialy.Bitmap;
@@ -253,5 +253,6 @@ namespace naiMorse
         {
             lNapis.Text = "";
         }
+           
     }
 }

@@ -36,8 +36,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.bWyczysc = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tbCzulosc = new System.Windows.Forms.TrackBar();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbCzulosc)).BeginInit();
             this.SuspendLayout();
             // 
             // pb1
@@ -117,11 +120,31 @@
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
+            // tbCzulosc
+            // 
+            this.tbCzulosc.Location = new System.Drawing.Point(498, 199);
+            this.tbCzulosc.Maximum = 30;
+            this.tbCzulosc.Name = "tbCzulosc";
+            this.tbCzulosc.Size = new System.Drawing.Size(234, 45);
+            this.tbCzulosc.TabIndex = 15;
+            this.tbCzulosc.Value = 15;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(498, 183);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(141, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Czułość wykrywania światła";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 471);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tbCzulosc);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.bWyczysc);
             this.Controls.Add(this.label2);
@@ -132,9 +155,10 @@
             this.Controls.Add(this.pb1);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "NAI Morse project";          
+            this.Text = "NAI Morse project";
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbCzulosc)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -150,6 +174,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button bWyczysc;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TrackBar tbCzulosc;
+        private System.Windows.Forms.Label label3;
     }
 }
 
